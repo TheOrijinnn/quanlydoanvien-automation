@@ -1,0 +1,740 @@
+{
+  "tong_chidoan": 73,
+  "tong_doanvien": 2377,
+  "tong_dangky": 2377,
+  "tong_danhgia": 2377,
+  "tong_coso_duyet": 2377,
+  "chidoan_hoanthanh": 71,
+  "chi_tiet": [
+    {
+      "stt": 1,
+      "name": "Chi đoàn 23110FIE",
+      "username": "23110fie",
+      "tong_dv": 64,
+      "dk": 64,
+      "dg": 64,
+      "cs": 64,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 2,
+      "name": "Chi đoàn 23116FIE",
+      "username": "23116fie",
+      "tong_dv": 20,
+      "dk": 20,
+      "dg": 20,
+      "cs": 20,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 3,
+      "name": "Chi đoàn 23119FIE",
+      "username": "23119fie",
+      "tong_dv": 33,
+      "dk": 33,
+      "dg": 33,
+      "cs": 33,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 4,
+      "name": "Chi đoàn 23124FIE",
+      "username": "23124fie",
+      "tong_dv": 34,
+      "dk": 34,
+      "dg": 34,
+      "cs": 34,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 5,
+      "name": "Chi đoàn 23142FIE",
+      "username": "23142fie",
+      "tong_dv": 51,
+      "dk": 51,
+      "dg": 51,
+      "cs": 51,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 6,
+      "name": "Chi đoàn 23143FIE",
+      "username": "23143fie",
+      "tong_dv": 24,
+      "dk": 24,
+      "dg": 24,
+      "cs": 24,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 7,
+      "name": "Chi đoàn 23145FIE",
+      "username": "23145fie",
+      "tong_dv": 29,
+      "dk": 29,
+      "dg": 29,
+      "cs": 29,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 8,
+      "name": "Chi đoàn 23146FIE",
+      "username": "23146fie",
+      "tong_dv": 33,
+      "dk": 33,
+      "dg": 33,
+      "cs": 33,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 9,
+      "name": "Chi đoàn 23149FIE",
+      "username": "23149fie",
+      "tong_dv": 20,
+      "dk": 20,
+      "dg": 20,
+      "cs": 20,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 10,
+      "name": "Chi đoàn 23151FIE",
+      "username": "23151fie",
+      "tong_dv": 37,
+      "dk": 37,
+      "dg": 37,
+      "cs": 37,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 11,
+      "name": "Chi đoàn 23161FIE",
+      "username": "23161fie",
+      "tong_dv": 37,
+      "dk": 37,
+      "dg": 37,
+      "cs": 37,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 12,
+      "name": "Chi đoàn 23144FIE",
+      "username": "23144fie",
+      "tong_dv": 20,
+      "dk": 20,
+      "dg": 20,
+      "cs": 20,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 13,
+      "name": "Chi đoàn 22144FIE",
+      "username": "22144fie",
+      "tong_dv": 20,
+      "dk": 20,
+      "dg": 20,
+      "cs": 20,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 14,
+      "name": "Chi đoàn 22143FIE",
+      "username": "22143fie",
+      "tong_dv": 17,
+      "dk": 17,
+      "dg": 17,
+      "cs": 17,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 15,
+      "name": "Chi đoàn 22146FIE",
+      "username": "22146fie",
+      "tong_dv": 13,
+      "dk": 13,
+      "dg": 13,
+      "cs": 13,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 16,
+      "name": "Chi đoàn 24143FIE",
+      "username": "24143fie",
+      "tong_dv": 61,
+      "dk": 61,
+      "dg": 61,
+      "cs": 61,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 17,
+      "name": "Chi đoàn 24146FIE",
+      "username": "24146fie",
+      "tong_dv": 62,
+      "dk": 62,
+      "dg": 62,
+      "cs": 62,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 18,
+      "name": "Chi đoàn 24144FIE",
+      "username": "24144fie",
+      "tong_dv": 70,
+      "dk": 70,
+      "dg": 70,
+      "cs": 70,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 19,
+      "name": "Chi đoàn 24149FIE",
+      "username": "24149fie",
+      "tong_dv": 20,
+      "dk": 20,
+      "dg": 20,
+      "cs": 20,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 20,
+      "name": "Chi đoàn 24161FIE",
+      "username": "24161fie",
+      "tong_dv": 58,
+      "dk": 58,
+      "dg": 58,
+      "cs": 58,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 21,
+      "name": "Chi đoàn 24142FIE",
+      "username": "24142fie",
+      "tong_dv": 65,
+      "dk": 65,
+      "dg": 65,
+      "cs": 65,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 22,
+      "name": "Chi đoàn 24151FIE",
+      "username": "24151fie",
+      "tong_dv": 55,
+      "dk": 55,
+      "dg": 55,
+      "cs": 55,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 23,
+      "name": "Chi đoàn 24119FIE",
+      "username": "24119fie",
+      "tong_dv": 59,
+      "dk": 59,
+      "dg": 59,
+      "cs": 59,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 24,
+      "name": "Chi đoàn 24147FIE",
+      "username": "24147fie",
+      "tong_dv": 39,
+      "dk": 39,
+      "dg": 39,
+      "cs": 39,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 25,
+      "name": "Chi đoàn 24145FIE",
+      "username": "24145fie",
+      "tong_dv": 67,
+      "dk": 67,
+      "dg": 67,
+      "cs": 67,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 26,
+      "name": "Chi đoàn 24110FIE",
+      "username": "24110fie",
+      "tong_dv": 64,
+      "dk": 64,
+      "dg": 64,
+      "cs": 64,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 27,
+      "name": "Chi đoàn 24116FIE",
+      "username": "24116fie",
+      "tong_dv": 57,
+      "dk": 57,
+      "dg": 57,
+      "cs": 57,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 28,
+      "name": "Chi đoàn 24124FIE",
+      "username": "24124fie",
+      "tong_dv": 69,
+      "dk": 69,
+      "dg": 69,
+      "cs": 69,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 29,
+      "name": "25110FIE",
+      "username": "25110fie",
+      "tong_dv": 41,
+      "dk": 41,
+      "dg": 41,
+      "cs": 41,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 30,
+      "name": "25116FIE",
+      "username": "25116fie",
+      "tong_dv": 27,
+      "dk": 27,
+      "dg": 27,
+      "cs": 27,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 31,
+      "name": "25119FIE",
+      "username": "25119fie",
+      "tong_dv": 9,
+      "dk": 9,
+      "dg": 9,
+      "cs": 9,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 32,
+      "name": "25124FIE",
+      "username": "25124fie",
+      "tong_dv": 13,
+      "dk": 13,
+      "dg": 13,
+      "cs": 13,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 33,
+      "name": "25128FIE",
+      "username": "25128fie",
+      "status": "LOGIN_FAIL",
+      "tong_dv": 0,
+      "dk": 0,
+      "dg": 0,
+      "cs": 0
+    },
+    {
+      "stt": 34,
+      "name": "25129FIE",
+      "username": "25129fie",
+      "tong_dv": 11,
+      "dk": 11,
+      "dg": 11,
+      "cs": 11,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 35,
+      "name": "25142FIE",
+      "username": "25142fie",
+      "tong_dv": 17,
+      "dk": 17,
+      "dg": 17,
+      "cs": 17,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 36,
+      "name": "25143FIE",
+      "username": "25143fie",
+      "tong_dv": 15,
+      "dk": 15,
+      "dg": 15,
+      "cs": 15,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 37,
+      "name": "25144FIE",
+      "username": "25144fie",
+      "tong_dv": 15,
+      "dk": 15,
+      "dg": 15,
+      "cs": 15,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 38,
+      "name": "25144FIEMA",
+      "username": "25144fiema",
+      "tong_dv": 6,
+      "dk": 6,
+      "dg": 6,
+      "cs": 6,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 39,
+      "name": "25145FIE",
+      "username": "25145fie",
+      "tong_dv": 33,
+      "dk": 33,
+      "dg": 33,
+      "cs": 33,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 40,
+      "name": "25146FIE",
+      "username": "25146fie",
+      "tong_dv": 39,
+      "dk": 39,
+      "dg": 39,
+      "cs": 39,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 41,
+      "name": "25147FIE",
+      "username": "25147fie",
+      "tong_dv": 22,
+      "dk": 22,
+      "dg": 22,
+      "cs": 22,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 42,
+      "name": "25149FIE",
+      "username": "25149fie",
+      "tong_dv": 15,
+      "dk": 15,
+      "dg": 15,
+      "cs": 15,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 43,
+      "name": "25151FIE",
+      "username": "25151fie",
+      "tong_dv": 37,
+      "dk": 37,
+      "dg": 37,
+      "cs": 37,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 44,
+      "name": "25161FIE",
+      "username": "25161fie",
+      "tong_dv": 24,
+      "dk": 24,
+      "dg": 24,
+      "cs": 24,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 45,
+      "name": "26110FIE1234",
+      "username": "26110fie1234",
+      "tong_dv": 37,
+      "dk": 37,
+      "dg": 37,
+      "cs": 37,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 46,
+      "name": "26110FIE5678",
+      "username": "26110fie5678",
+      "tong_dv": 29,
+      "dk": 29,
+      "dg": 29,
+      "cs": 29,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 47,
+      "name": "26116FIE123",
+      "username": "26116fie123",
+      "tong_dv": 26,
+      "dk": 26,
+      "dg": 26,
+      "cs": 26,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 48,
+      "name": "26116FIE456",
+      "username": "26116fie456",
+      "tong_dv": 16,
+      "dk": 16,
+      "dg": 16,
+      "cs": 16,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 49,
+      "name": "26119FIE",
+      "username": "26119fie",
+      "tong_dv": 21,
+      "dk": 21,
+      "dg": 21,
+      "cs": 21,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 50,
+      "name": "26124FIE",
+      "username": "26124fie",
+      "tong_dv": 34,
+      "dk": 34,
+      "dg": 34,
+      "cs": 34,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 51,
+      "name": "26126FIE",
+      "username": "26126fie",
+      "tong_dv": 15,
+      "dk": 15,
+      "dg": 15,
+      "cs": 15,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 52,
+      "name": "26128FIE",
+      "username": "26128fie",
+      "tong_dv": 53,
+      "dk": 53,
+      "dg": 53,
+      "cs": 53,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 53,
+      "name": "26129FIE",
+      "username": "26129fie",
+      "tong_dv": 22,
+      "dk": 22,
+      "dg": 22,
+      "cs": 22,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 54,
+      "name": "26130FIE",
+      "username": "26130fie",
+      "tong_dv": 18,
+      "dk": 18,
+      "dg": 18,
+      "cs": 18,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 55,
+      "name": "26133FIE",
+      "username": "26133fie",
+      "tong_dv": 16,
+      "dk": 16,
+      "dg": 16,
+      "cs": 16,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 56,
+      "name": "26136FIE",
+      "username": "26136fie",
+      "tong_dv": 9,
+      "dk": 9,
+      "dg": 9,
+      "cs": 9,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 57,
+      "name": "26142FIE123",
+      "username": "26142fie123",
+      "tong_dv": 45,
+      "dk": 45,
+      "dg": 45,
+      "cs": 45,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 58,
+      "name": "26142FIE456",
+      "username": "26142fie456",
+      "tong_dv": 42,
+      "dk": 42,
+      "dg": 42,
+      "cs": 42,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 59,
+      "name": "26143FIE123",
+      "username": "26143fie123",
+      "tong_dv": 30,
+      "dk": 30,
+      "dg": 30,
+      "cs": 30,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 60,
+      "name": "26143FIE456",
+      "username": "26143fie456",
+      "tong_dv": 28,
+      "dk": 28,
+      "dg": 28,
+      "cs": 28,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 61,
+      "name": "26144FIE123",
+      "username": "26144fie123",
+      "tong_dv": 41,
+      "dk": 41,
+      "dg": 41,
+      "cs": 41,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 62,
+      "name": "26144FIE456",
+      "username": "26144fie456",
+      "tong_dv": 32,
+      "dk": 32,
+      "dg": 32,
+      "cs": 32,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 63,
+      "name": "26144FIEMA",
+      "username": "26144fiema",
+      "tong_dv": 27,
+      "dk": 27,
+      "dg": 27,
+      "cs": 27,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 64,
+      "name": "26145FIE123",
+      "username": "26145fie123",
+      "tong_dv": 36,
+      "dk": 36,
+      "dg": 36,
+      "cs": 36,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 65,
+      "name": "26145FIE456",
+      "username": "26145fie456",
+      "tong_dv": 31,
+      "dk": 31,
+      "dg": 31,
+      "cs": 31,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 66,
+      "name": "26146FIE123",
+      "username": "26146fie123",
+      "tong_dv": 32,
+      "dk": 32,
+      "dg": 32,
+      "cs": 32,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 67,
+      "name": "26146FIE456",
+      "username": "26146fie456",
+      "tong_dv": 33,
+      "dk": 33,
+      "dg": 33,
+      "cs": 33,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 68,
+      "name": "26147FIE",
+      "username": "26147fie",
+      "tong_dv": 23,
+      "dk": 23,
+      "dg": 23,
+      "cs": 23,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 69,
+      "name": "26149FIE",
+      "username": "26149fie",
+      "tong_dv": 31,
+      "dk": 31,
+      "dg": 31,
+      "cs": 31,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 70,
+      "name": "26151FIE123",
+      "username": "26151fie123",
+      "tong_dv": 42,
+      "dk": 42,
+      "dg": 42,
+      "cs": 42,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 71,
+      "name": "26151FIE456",
+      "username": "26151fie456",
+      "tong_dv": 28,
+      "dk": 28,
+      "dg": 28,
+      "cs": 28,
+      "status": "HOÀN THÀNH 100%"
+    },
+    {
+      "stt": 72,
+      "name": "26155FIE",
+      "username": "26155fie",
+      "status": "LOGIN_FAIL",
+      "tong_dv": 0,
+      "dk": 0,
+      "dg": 0,
+      "cs": 0
+    },
+    {
+      "stt": 73,
+      "name": "26161FIE",
+      "username": "26161fie",
+      "tong_dv": 58,
+      "dk": 58,
+      "dg": 58,
+      "cs": 58,
+      "status": "HOÀN THÀNH 100%"
+    }
+  ]
+}
