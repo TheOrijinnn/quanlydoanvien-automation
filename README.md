@@ -1,7 +1,11 @@
-# 🚀 BỘ TOOL TỰ ĐỘNG HÓA CHƯƠNG TRÌNH RÈN LUYỆN ĐOÀN VIÊN
+# 🚀 BỘ TOOL TỰ ĐỘNG HÓA QUẢN LÝ ĐOÀN VIÊN
 
-Bộ công cụ tự động hóa toàn bộ quy trình **Đăng ký rèn luyện**, **Đánh giá rèn luyện (chấm 100/100 điểm)** và **Duyệt xác nhận cấp Đoàn cơ sở** trên cổng thông tin:  
+Bộ công cụ tự động hóa toàn diện 3 nghiệp vụ lớn trên cổng thông tin:  
 🔗 [https://quanlydoanvien.doanthanhnien.vn](https://quanlydoanvien.doanthanhnien.vn)
+
+1. **Chương trình rèn luyện đoàn viên:** Đăng ký rèn luyện $\rightarrow$ Tự chấm điểm tối đa (100/100) $\rightarrow$ Chuyển cấp trên $\rightarrow$ Đoàn cơ sở duyệt 56 trang $\rightarrow$ Đối soát báo cáo.
+2. **Nghiệp vụ Đánh giá đoàn viên:** Tự động phân trang $\rightarrow$ Xếp loại "Hoàn thành xuất sắc nhiệm vụ" (100%) $\rightarrow$ Lưu & Gửi từng trang $\rightarrow$ Đoàn cơ sở duyệt nhận xét đánh giá.
+3. **Nghiệp vụ Cấp thẻ đoàn viên:** Tự động chọn tất cả đoàn viên chưa có thẻ $\rightarrow$ Trình "Cấp mới thẻ đoàn viên" $\rightarrow$ Đoàn cơ sở duyệt xử lý cấp thẻ lên cấp trên.
 
 ---
 
@@ -10,20 +14,30 @@ Bộ công cụ tự động hóa toàn bộ quy trình **Đăng ký rèn luyệ
 ```text
 quanlydoanvien-automation/
 │
-├── CHAY_TU_DONG.exe      # File chạy độc lập 1-click (Zero install - Không cần cài Python)
-├── CHAY_TU_DONG.bat      # File chạy tự động (Tự check Python, tự cài thư viện và chạy)
-├── MENU_LUA_CHON.bat     # File menu điều khiển chọn chạy từng bước riêng
+├── CHAY_TU_DONG.bat      # File chạy tự động toàn bộ 1-click (tự check Python, tự cài thư viện)
+├── MENU_LUA_CHON.bat     # Menu tương tác chọn chạy từng nghiệp vụ riêng biệt
 ├── run.md                # Hướng dẫn chi tiết dành riêng cho người không rành kỹ thuật (low-tech)
-├── README.md             # Tài liệu kỹ thuật
+├── README.md             # Tài liệu kỹ thuật chi tiết
 │
 └── src/                  # Toàn bộ mã nguồn & file kỹ thuật được gom gọn vào đây
-    ├── config.py         # File cấu hình: 73 tài khoản, tài khoản cơ sở, mật khẩu, năm, barem điểm
-    ├── api_client.py     # Module kết nối API hệ thống (tự động lấy token, tự động retry)
-    ├── step1_chidoan.py  # BƯỚC 1: Xử lý 73 Chi đoàn (Đăng ký, chấm 100đ, chuyển cấp trên)
-    ├── step2_co_so.py    # BƯỚC 2: Cấp Đoàn cơ sở (yfie.hcmute) duyệt toàn bộ các trang
-    ├── step3_audit.py    # BƯỚC 3: Đối soát đa luồng kiểm tra 100% hoàn thành & xuất báo cáo
-    ├── run_all.py        # Script chạy tuần tự cả 3 bước
-    ├── requirements.txt  # Thư viện phụ thuộc (`requests`)
+    ├── config.py         # File cấu hình: 73 tài khoản, tài khoản admin yfie.hcmute, mật khẩu, năm
+    ├── api_client.py     # Module kết nối API hệ thống (XSRF generator AES-PBKDF2, auto-retry, token manager)
+    │
+    │   --- Nghiệp vụ 1: Rèn luyện đoàn viên ---
+    ├── step1_chidoan.py  # Bước 1: 73 Chi đoàn đăng ký, chấm 100đ, chuyển cấp trên
+    ├── step2_co_so.py    # Bước 2: Đoàn cơ sở (yfie.hcmute) duyệt toàn bộ 56 trang xác nhận
+    ├── step3_audit.py    # Bước 3: Đối soát đa luồng kiểm tra 100% hoàn thành & xuất audit_report.json
+    │
+    │   --- Nghiệp vụ 2: Đánh giá đoàn viên ---
+    ├── step4_danh_gia_doan_vien.py # Bước 4: Đánh giá xếp loại xuất sắc (ID=4), lưu & gửi từng trang
+    ├── step5_duyet_danh_gia.py     # Bước 5: Đoàn cơ sở duyệt nhận xét đánh giá (chỉ duyệt hàng gửi, không đánh giá lại)
+    │
+    │   --- Nghiệp vụ 3: Cấp thẻ đoàn viên ---
+    ├── step6_trinh_cap_the.py      # Bước 6: Chi đoàn trình cấp mới thẻ (chọn toàn bộ đoàn viên chưa cấp thẻ)
+    ├── step7_duyet_cap_the.py      # Bước 7: Đoàn cơ sở duyệt xử lý cấp thẻ chuyển tiếp cấp trên
+    │
+    ├── run_all.py        # Script chạy chuỗi toàn bộ tất cả nghiệp vụ tự động
+    ├── requirements.txt  # Thư viện phụ thuộc (`requests`, `cryptography`)
     └── audit_report.json # File báo cáo kết quả đối soát chi tiết
 ```
 
@@ -31,23 +45,31 @@ quanlydoanvien-automation/
 
 ## 🛠️ YÊU CẦU & CÀI ĐẶT
 
-### Cách 1: Chạy trực tiếp `CHAY_TU_DONG.exe` (Khuyên dùng)
-- Click đúp vào `CHAY_TU_DONG.exe`. Không cần cài thêm bất kỳ phần mềm nào khác!
-
-### Cách 2: Chạy file `.bat`
-- Máy tính cần có Python 3.8+ (tích chọn `Add python.exe to PATH`).
-- Click đúp vào `CHAY_TU_DONG.bat` để chạy toàn bộ.
-- Hoặc click đúp `MENU_LUA_CHON.bat` để chọn chạy từng bước.
+### Chạy bằng file `.bat` (Khuyên dùng)
+- Máy tính cần có Python 3.8+ (khi cài nhớ tích chọn `Add python.exe to PATH`).
+- Click đúp vào **`MENU_LUA_CHON.bat`** để mở Menu điều khiển trực quan:
+  * `[1]` Bước 1: Chi đoàn đăng ký & chấm điểm rèn luyện
+  * `[2]` Bước 2: Đoàn cơ sở xác nhận duyệt rèn luyện
+  * `[3]` Bước 3: Đối soát tiến độ rèn luyện
+  * `[4]` Bước 4: Chi đoàn đánh giá đoàn viên xuất sắc 100%
+  * `[5]` Bước 5: Đoàn cơ sở duyệt đánh giá đoàn viên
+  * `[6]` Bước 6: Chi đoàn trình cấp mới thẻ đoàn viên
+  * `[7]` Bước 7: Đoàn cơ sở duyệt cấp thẻ đoàn viên
+  * `[8]` CHẠY TẤT CẢ CÁC BƯỚC TỰ ĐỘNG
+  * `[0]` Thoát
+- Hoặc click đúp vào **`CHAY_TU_DONG.bat`** để chạy từ đầu đến cuối một mạch.
 
 ---
 
 ## 💡 CÁC ĐẶC BIỆT LƯU Ý ĐÃ ĐƯỢC XỬ LÝ SẴN TRONG CODE (Gotchas)
 
-1. **Giới hạn số lượng đăng ký 1 lần (Oracle ORA-01403):**  
-   Hệ thống Quản lý đoàn viên sẽ báo lỗi nếu gửi đăng ký > 10 đoàn viên trong 1 request. Trong `step1_chidoan.py` đã cài đặt cơ chế **tự động chia cụm 5 đoàn viên/lần gửi**, đảm bảo 100% không bao giờ bị nghẽn hay lỗi backend.
-2. **Mã hóa ID động theo phiên (Dynamic Encrypted IDs):**  
-   Mỗi lần đăng nhập, mã chương trình và mã tiêu chí sẽ được hash ngẫu nhiên. Code đã tự động gọi `ndv05.dangky.ctrl_cauhinh` để bóc tách ID động cho từng phiên.
-3. **Tự động gia hạn Token:**  
-   Nếu token bị hết hạn giữa chừng (401 Unauthorized), `api_client.py` sẽ tự động đăng nhập lại và thực thi tiếp tục mà không làm gián đoạn tiến trình.
-4. **Lọc bản ghi trùng lặp trong cơ sở dữ liệu:**  
-   Bộ lọc thông minh theo mã sinh viên duy nhất (`id`) giúp loại bỏ các hồ sơ rác/trùng lặp do trường nạp dữ liệu.
+1. **Bảo mật XSRF Token nâng cao:**  
+   Các API REST `/ws/api/...` của cổng thông tin yêu cầu header `X-XSRF-TOKEN` được mã hóa lồng nhau qua AES-CBC với khóa PBKDF2 HMAC-SHA1 dựa trên JWT token, URL và nội dung Body/FormData. `api_client.py` đã giải mã và tích hợp bộ sinh token chuẩn 100%.
+2. **Cơ chế phân trang & Lưu trạng thái Đánh giá đoàn viên:**  
+   Khi chuyển trang trên giao diện web, dữ liệu trang trước sẽ bị mất nếu chưa bấm Lưu. Tool tự động lặp qua từng trang (50 đoàn viên/trang), gọi `updateDanhGia` (Lưu) rồi gọi `sendDanhGia` (Gửi) cho từng trang độc lập.
+3. **An toàn dữ liệu khi Duyệt nhận xét đánh giá:**  
+   Code cam kết **chỉ bấm Duyệt** cho các Chi đoàn có trạng thái `TRANGTHAI = 1` ("Đã gửi danh sách đánh giá"), **tuyệt đối bỏ qua** và không bấm "Đánh giá lại" với các hàng đã duyệt (`TRANGTHAI = 2`).
+4. **Loại trừ các Chi đoàn đã cấp thẻ:**  
+   Khi trình cấp thẻ (`step6_trinh_cap_the.py`), hệ thống tự động kiểm tra lịch sử và danh sách ngoại lệ các Chi đoàn đã xử lý từ trước để tránh tạo trùng lặp yêu cầu.
+5. **Tự động chia cụm & Gia hạn Token:**  
+   Tự động chia cụm 5 đoàn viên/lần gửi để tránh lỗi tràn bộ nhớ Oracle (ORA-01403) và tự động đăng nhập lại khi token hết hạn.
