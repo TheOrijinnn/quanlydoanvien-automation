@@ -4,8 +4,9 @@ Bộ công cụ tự động hóa toàn diện 3 nghiệp vụ lớn trên cổn
 🔗 [https://quanlydoanvien.doanthanhnien.vn](https://quanlydoanvien.doanthanhnien.vn)
 
 1. **Chương trình rèn luyện đoàn viên:** Đăng ký rèn luyện $\rightarrow$ Tự chấm điểm tối đa (100/100) $\rightarrow$ Chuyển cấp trên $\rightarrow$ Đoàn cơ sở duyệt 56 trang $\rightarrow$ Đối soát báo cáo.
-2. **Nghiệp vụ Đánh giá đoàn viên:** Tự động phân trang $\rightarrow$ Xếp loại "Hoàn thành xuất sắc nhiệm vụ" (100%) $\rightarrow$ Lưu & Gửi từng trang $\rightarrow$ Đoàn cơ sở duyệt nhận xét đánh giá.
-3. **Nghiệp vụ Cấp thẻ đoàn viên:** Tự động chọn tất cả đoàn viên chưa có thẻ $\rightarrow$ Trình "Cấp mới thẻ đoàn viên" $\rightarrow$ Đoàn cơ sở duyệt xử lý cấp thẻ lên cấp trên.
+2. **Nghiệp vụ Đánh giá đoàn viên:** Tự động phân trang $\rightarrow$ Xếp loại "Hoàn thành xuất sắc nhiệm vụ" (100%) $\rightarrow$ Lưu & Gửi từng trang $\rightarrow$ **Auto Double-Check kiểm tra 100% đoàn viên** $\rightarrow$ Đoàn cơ sở duyệt nhận xét đánh giá.
+3. **Nghiệp vụ Cấp thẻ đoàn viên:** Tự động chọn tất cả đoàn viên chưa có thẻ $\rightarrow$ Trình "Cấp mới thẻ đoàn viên" $\rightarrow$ **Auto Double-Check xác nhận lịch sử** $\rightarrow$ Đoàn cơ sở duyệt xử lý cấp thẻ lên cấp trên.
+4. **Hệ thống Double-Check & Thống kê toàn diện:** Tính năng tự động đối soát chéo số liệu giữa Rèn luyện và Đánh giá (báo cáo ngay lập tức nếu lệch cột tổng số đoàn viên) + Tùy chọn xuất dashboard & file JSON thống kê tổng thể toàn khoa.
 
 ---
 
@@ -36,9 +37,13 @@ quanlydoanvien-automation/
     ├── step6_trinh_cap_the.py      # Bước 6: Chi đoàn trình cấp mới thẻ (chọn toàn bộ đoàn viên chưa cấp thẻ)
     ├── step7_duyet_cap_the.py      # Bước 7: Đoàn cơ sở duyệt xử lý cấp thẻ chuyển tiếp cấp trên
     │
-    ├── run_all.py        # Script chạy chuỗi toàn bộ tất cả nghiệp vụ tự động
+    │   --- Bổ sung: Thống kê & Double-Check toàn diện ---
+    ├── step8_thong_ke_bao_cao.py   # Bước 8: Tùy chọn xuất thống kê Dashboard & Auto Double-Check đối soát chéo
+    │
+    ├── run_all.py        # Script chạy chuỗi toàn bộ tất cả nghiệp vụ tự động (kèm Auto Double-Check)
     ├── requirements.txt  # Thư viện phụ thuộc (`requests`, `cryptography`)
-    └── audit_report.json # File báo cáo kết quả đối soát chi tiết
+    ├── audit_report.json # File báo cáo kết quả đối soát chi tiết
+    └── bao_cao_thong_ke_toan_khoa.json # File JSON xuất số liệu thống kê toàn khoa
 ```
 
 ---
@@ -51,11 +56,13 @@ quanlydoanvien-automation/
   * `[1]` Bước 1: Chi đoàn đăng ký & chấm điểm rèn luyện
   * `[2]` Bước 2: Đoàn cơ sở xác nhận duyệt rèn luyện
   * `[3]` Bước 3: Đối soát tiến độ rèn luyện
-  * `[4]` Bước 4: Chi đoàn đánh giá đoàn viên xuất sắc 100%
-  * `[5]` Bước 5: Đoàn cơ sở duyệt đánh giá đoàn viên
-  * `[6]` Bước 6: Chi đoàn trình cấp mới thẻ đoàn viên
-  * `[7]` Bước 7: Đoàn cơ sở duyệt cấp thẻ đoàn viên
-  * `[8]` CHẠY TẤT CẢ CÁC BƯỚC TỰ ĐỘNG
+  * `[4]` Bước 4: Chi đoàn đánh giá đoàn viên xuất sắc 100% (Auto Double-Check)
+  * `[5]` Bước 5: Đoàn cơ sở duyệt đánh giá đoàn viên (Auto Double-Check)
+  * `[6]` Bước 6: Chi đoàn trình cấp mới thẻ đoàn viên (Auto Double-Check)
+  * `[7]` Bước 7: Đoàn cơ sở duyệt cấp thẻ đoàn viên (Auto Double-Check)
+  * `[8]` Tùy chọn: Thống kê & Xuất báo cáo tổng hợp toàn khoa
+  * `[9]` Tùy chọn: Chạy kiểm tra & Đối soát chéo số liệu (Double-Check Audit)
+  * `[10]` CHẠY TẤT CẢ CÁC BƯỚC TỰ ĐỘNG (Bao gồm Auto Double-Check toàn diện)
   * `[0]` Thoát
 - Hoặc click đúp vào **`CHAY_TU_DONG.bat`** để chạy từ đầu đến cuối một mạch.
 

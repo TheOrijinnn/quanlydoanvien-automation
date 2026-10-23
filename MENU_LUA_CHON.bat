@@ -25,24 +25,28 @@ echo            HỆ THỐNG TỰ ĐỘNG HÓA QUẢN LÝ ĐOÀN VIÊN - MENU Đ
 echo ===============================================================================
 echo.
 echo   --- CHƯƠNG TRÌNH RÈN LUYỆN ĐOÀN VIÊN ---
-echo   [1] Bước 1: Chi đoàn Đăng ký, Chấm 100 điểm ^& Chuyển cấp trên (73 Chi đoàn)
+echo   [1] Bước 1: Chi đoàn Đăng ký, Chấm 100 điểm ^& Chuyển cấp trên (Toàn bộ Chi đoàn)
 echo   [2] Bước 2: Đoàn cơ sở (yfie.hcmute) xác nhận duyệt rèn luyện (56 trang)
 echo   [3] Bước 3: Đối soát đa luồng tiến độ rèn luyện ^& Xuất báo cáo
 echo.
 echo   --- NGHIỆP VỤ ĐÁNH GIÁ ĐOÀN VIÊN ---
-echo   [4] Bước 4: Chi đoàn đánh giá xếp loại "Hoàn thành xuất sắc nhiệm vụ"
-echo   [5] Bước 5: Đoàn cơ sở (yfie.hcmute) duyệt danh sách nhận xét đánh giá
+echo   [4] Bước 4: Chi đoàn đánh giá xếp loại "Hoàn thành xuất sắc" (Auto Double-Check)
+echo   [5] Bước 5: Đoàn cơ sở (yfie.hcmute) duyệt nhận xét đánh giá (Auto Double-Check)
 echo.
 echo   --- NGHIỆP VỤ CẤP THẺ ĐOÀN VIÊN ---
-echo   [6] Bước 6: Chi đoàn trình "Cấp mới thẻ đoàn viên" cho tất cả đoàn viên
+echo   [6] Bước 6: Chi đoàn trình "Cấp mới thẻ đoàn viên" (Auto Double-Check)
 echo   [7] Bước 7: Đoàn cơ sở (yfie.hcmute) duyệt xử lý cấp thẻ đoàn viên
 echo.
+echo   --- TÙY CHỌN BỔ SUNG: THỐNG KÊ ^& KIỂM TRA SỐ LIỆU ---
+echo   [8] Tùy chọn: Thống kê ^& Xuất báo cáo tổng hợp toàn khoa (Rèn luyện + Đánh giá + Cấp thẻ)
+echo   [9] Tùy chọn: Chạy kiểm tra ^& Đối soát chéo số liệu (Double-Check Audit)
+echo.
 echo   --- CHẠY TỰ ĐỘNG HOÀN TOÀN ---
-echo   [8] CHẠY TẤT CẢ CÁC BƯỚC TỰ ĐỘNG (Từ Bước 1 đến Bước 7)
+echo   [10] CHẠY TẤT CẢ CÁC BƯỚC TỰ ĐỘNG (Bao gồm Auto Double-Check toàn diện)
 echo   [0] Thoát
 echo.
 echo ===============================================================================
-set /p choice="Nhập lựa chọn của bạn (0-8) rồi bấm Enter: "
+set /p choice="Nhập lựa chọn của bạn (0-10) rồi bấm Enter: "
 
 if "%choice%"=="1" goto B1
 if "%choice%"=="2" goto B2
@@ -51,7 +55,9 @@ if "%choice%"=="4" goto B4
 if "%choice%"=="5" goto B5
 if "%choice%"=="6" goto B6
 if "%choice%"=="7" goto B7
-if "%choice%"=="8" goto CHAY_HET
+if "%choice%"=="8" goto THONG_KE
+if "%choice%"=="9" goto DOUBLE_CHECK
+if "%choice%"=="10" goto CHAY_HET
 if "%choice%"=="0" exit /b
 
 echo Lựa chọn không hợp lệ, vui lòng chọn lại!
@@ -107,6 +113,24 @@ goto MENU
 :B7
 cls
 python step7_duyet_cap_the.py
+echo.
+pause
+goto MENU
+
+:THONG_KE
+cls
+echo [1] Báo cáo nhanh (Quick Mode)
+echo [2] Báo cáo chi tiết toàn diện (Full Audit - Quét sâu từng đoàn viên)
+set /p tk_opt="Chọn chế độ báo cáo (1 hoặc 2): "
+if "%tk_opt%"=="1" python step8_thong_ke_bao_cao.py --quick
+if "%tk_opt%"=="2" python step8_thong_ke_bao_cao.py
+echo.
+pause
+goto MENU
+
+:DOUBLE_CHECK
+cls
+python step8_thong_ke_bao_cao.py --audit-only
 echo.
 pause
 goto MENU

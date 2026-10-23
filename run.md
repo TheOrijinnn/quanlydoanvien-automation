@@ -17,7 +17,9 @@ Màn hình đen sẽ hiện ra Menu với các con số rất dễ chọn:
 * Nhập **`5`** rồi Enter: Đoàn cơ sở duyệt nhận xét đánh giá đoàn viên.
 * Nhập **`6`** rồi Enter: Các Chi đoàn trình cấp mới thẻ đoàn viên (chọn toàn bộ đoàn viên).
 * Nhập **`7`** rồi Enter: Đoàn cơ sở duyệt cấp thẻ đoàn viên.
-* Nhập **`8`** rồi Enter: **CHẠY TẤT CẢ** các bước từ đầu đến cuối hoàn toàn tự động.
+* Nhập **`8`** rồi Enter: **Thống kê & Báo cáo số liệu toàn diện** (xem tổng số đoàn viên, tỷ lệ hoàn thành, xuất file JSON).
+* Nhập **`9`** rồi Enter: **Chạy Double-Check kiểm tra & đối soát chéo** (so sánh số liệu giữa các nghiệp vụ).
+* Nhập **`10`** rồi Enter: **CHẠY TẤT CẢ** các bước từ đầu đến cuối hoàn toàn tự động (kèm Auto Double-Check).
 * Nhập **`0`** rồi Enter: Thoát chương trình.
 
 ---
