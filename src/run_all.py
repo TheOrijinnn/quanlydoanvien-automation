@@ -10,6 +10,7 @@ import step4_danh_gia_doan_vien
 import step5_duyet_danh_gia
 import step6_trinh_cap_the
 import step7_duyet_cap_the
+import step8_thong_ke_bao_cao
 
 def main():
     print("╔══════════════════════════════════════════════════════════════════════════════════════╗")
@@ -44,6 +45,12 @@ def main():
     step6_trinh_cap_the.main()
     print("\n" + "-" * 80 + "\n")
     step7_duyet_cap_the.main()
+
+    # PHẦN 4: AUTO DOUBLE-CHECK VÀ THỐNG KÊ TỔNG THỂ
+    print("\n" + "█" * 80)
+    print("  PHẦN 4: TỰ ĐỘNG DOUBLE-CHECK ĐỐI SOÁT CHÉO & XUẤT BÁO CÁO TOÀN DIỆN")
+    print("█" * 80 + "\n")
+    step8_thong_ke_bao_cao.main(quick_mode=False)
 
     total_time = time.time() - start_all
     print("\n" + "=" * 80)
