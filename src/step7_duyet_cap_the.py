@@ -44,7 +44,7 @@ def main():
         print("🎉 Không có yêu cầu nào đang chờ xử lý! Toàn bộ đã được duyệt hoàn tất.")
         return
 
-    url_approve = f"{BASE_URL}/api/LichSuBienDong/luu_xulybiendongCapThe"
+    url_approve = f"{BASE_URL}/ws/api/LichSuBienDong/luu_xulybiendongCapThe"
     headers_approve = {
         'Authorization': f'Bearer {admin_client.token}',
         'User-Agent': 'Mozilla/5.0'

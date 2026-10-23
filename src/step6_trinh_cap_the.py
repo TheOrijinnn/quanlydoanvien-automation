@@ -6,22 +6,7 @@ import config
 
 sys.stdout.reconfigure(encoding='utf-8')
 
-# Danh sách các chi đoàn đã xử lý cần bỏ qua
-EXCLUDED_ORGS = {
-    '26161fie', '26116fie456', '24124fie', '22149fie', '23161fie', '23144fie',
-    '24151fie', '22161fie', '24149fie', '24145fie', '25151fie', '25145fie',
-    '25144fie', '25119fie', '24110fie', '24147fie', '24116fie', '25128fie',
-    '22142fie', '25124fie', '25161fie', '25147fie', '25146fie', '25143fie',
-    '25144fiema', '25142fie', '25116fie', '25129fie', '25110fie', '23151fie',
-    '23146fie', '22144fie', '22119fie', '22145fie'
-}
-
 def process_single_chidoan(idx, total, name, username):
-    norm = username.lower().replace("chi đoàn", "").replace("chi doan", "").strip()
-    if norm in EXCLUDED_ORGS:
-        print(f"[{idx}/{total}] {name} ({username}): Thuộc danh sách đã xử lý -> [BỎ QUA]")
-        return {"account": username, "status": "Đã xử lý từ trước", "members": 0}
-
     client = DoanVienClient(username, config.DEFAULT_PASSWORD)
     if not client.login():
         print(f"[{idx}/{total}] {name} ({username}): Lỗi đăng nhập -> [BỎ QUA]")
@@ -39,19 +24,20 @@ def process_single_chidoan(idx, total, name, username):
         'User-Agent': 'Mozilla/5.0'
     }
 
-    # 1. Kiểm tra xem chi đoàn đã có yêu cầu cấp thẻ trước đó chưa
-    url_history = f"{BASE_URL}/ws/api/LichSuBienDong/biendongxulynvnhap_dsN"
-    payload_h = {'IdNhanVienNhap': user_id, 'TrangThaiXL': 0}
-    body_h = json.dumps(payload_h, separators=(',', ':'))
-    headers['X-XSRF-TOKEN'] = client.get_xsrf(url_history, body_h)
-    res_h = client.session.post(url_history, data=body_h, headers=headers, timeout=20)
-    if res_h.status_code == 200:
-        history = res_h.json()
-        capthe_history = [it for it in history if it.get('IDBIENDONG') == 45]
-        if capthe_history:
-            last_status = capthe_history[0].get('TRANGTHAI')
-            print(f"[{idx}/{total}] {name} ({username}): Đã tồn tại yêu cầu ({last_status}) -> [BỎ QUA]")
-            return {"account": username, "status": f"Đã có yêu cầu ({last_status})", "members": 0}
+    # 1. Kiểm tra danh sách đoàn viên cần cấp thẻ trực tiếp từ hệ thống
+    url_members = f"{BASE_URL}/ws/api/NhanVienToChuc/ds_thanhvientochucbiendong_capthe"
+    payload_m = {'IdToChuc': id_tochuc, 'IdBienDong': 45, 'IdQuanHuyen': 0, 'IdPhuongXa': 0}
+    body_m = json.dumps(payload_m, separators=(',', ':'))
+    headers['X-XSRF-TOKEN'] = client.get_xsrf(url_members, body_m)
+    res_m = client.session.post(url_members, data=body_m, headers=headers, timeout=20)
+    members = res_m.json() if res_m.status_code == 200 else []
+
+    if not members:
+        print(f"[{idx}/{total}] {name} ({username}): ✅ Đã có thẻ đầy đủ (0 ĐV cần cấp mới) -> [BỎ QUA]")
+        return {"account": username, "status": "Đã có thẻ đầy đủ", "members": 0}
+
+    member_names = [m.get('HOTEN') for m in members]
+    print(f"[{idx}/{total}] {name} ({username}): ⚠️ Phát hiện {len(members)} đoàn viên chưa có thẻ: {', '.join(member_names)}")
 
     # 2. Lấy thông tin tổ chức cấp trên
     url_captren = f"{BASE_URL}/ws/api/LichSuBienDong/ds_ToChucCapTren"
@@ -68,7 +54,7 @@ def process_single_chidoan(idx, total, name, username):
     id_captc_captren = captren['IDCAPTC']
 
     # 3. Lấy cấu hình quy trình chi tiết
-    url_captochuc = f"{BASE_URL}/api/QuyTrinh/quytrinh_chitiet_cauhinh"
+    url_captochuc = f"{BASE_URL}/ws/api/QuyTrinh/quytrinh_chitiet_cauhinh"
     payload_cptc = {'IdBienDong': 45, 'IdCapToChuc': id_captc, 'IdLoaiHTC': id_loaihtc, 'IdLoaiHTCBDong': 1}
     body_cptc = json.dumps(payload_cptc, separators=(',', ':'))
     headers['X-XSRF-TOKEN'] = client.get_xsrf(url_captochuc, body_cptc)
@@ -76,18 +62,6 @@ def process_single_chidoan(idx, total, name, username):
     cauhinh = res_cptc.json() if res_cptc.status_code == 200 else []
     qt_match = next((q for q in cauhinh if q.get('IDCAPTOCHUC') == id_captc_captren), None)
     id_quytrinh = qt_match['ID'] if qt_match else (cauhinh[0]['ID'] if cauhinh else 232)
-
-    # 4. Lấy danh sách đoàn viên cần cấp thẻ
-    url_members = f"{BASE_URL}/api/NhanVienToChuc/ds_thanhvientochucbiendong_capthe"
-    payload_m = {'IdToChuc': id_tochuc, 'IdBienDong': 45, 'IdQuanHuyen': 0, 'IdPhuongXa': 0}
-    body_m = json.dumps(payload_m, separators=(',', ':'))
-    headers['X-XSRF-TOKEN'] = client.get_xsrf(url_members, body_m)
-    res_m = client.session.post(url_members, data=body_m, headers=headers, timeout=20)
-    members = res_m.json() if res_m.status_code == 200 else []
-
-    if not members:
-        print(f"[{idx}/{total}] {name} ({username}): Không có đoàn viên cần cấp thẻ (0 ĐV) -> [BỎ QUA]")
-        return {"account": username, "status": "Không có đoàn viên cần cấp thẻ", "members": 0}
 
     # Tự động chọn tất cả đoàn viên trong popup
     dsdv = []
@@ -124,7 +98,7 @@ def process_single_chidoan(idx, total, name, username):
     }
 
     data_str = json.dumps(en, separators=(',', ':'))
-    url_submit = f"{BASE_URL}/api/LichSuBienDong/biendongxuly_nhap"
+    url_submit = f"{BASE_URL}/ws/api/LichSuBienDong/biendongxuly_nhap"
     form_dict = {'data': data_str}
     xe = "[FORMDATA]" + json.dumps(form_dict, separators=(',', ':'))
     xsrf_submit = client.get_xsrf(url_submit, xe)
