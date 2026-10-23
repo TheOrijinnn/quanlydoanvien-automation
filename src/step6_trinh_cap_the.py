@@ -140,6 +140,19 @@ def process_single_chidoan(idx, total, name, username):
     if res_sub.status_code == 200 and res_sub.json().get('success'):
         idxuly = res_sub.json().get('idxuly')
         print(f"[{idx}/{total}] {name} ({username}): [THÀNH CÔNG ✅] Đã trình cấp mới thẻ cho {len(dsdv)} đoàn viên (ID: {idxuly})")
+
+        # --- TỰ ĐỘNG DOUBLE CHECK LẠI SỐ LIỆU ---
+        time.sleep(0.3)
+        res_check = client.session.post(url_history, data=body_h, headers=headers, timeout=20)
+        confirmed = False
+        if res_check.status_code == 200:
+            chk_history = res_check.json()
+            confirmed = any(it.get('IDBIENDONG') == 45 for it in chk_history)
+        if confirmed:
+            print(f"      🔍 [AUTO DOUBLE-CHECK ✅]: Yêu cầu cấp thẻ đã được hệ thống ghi nhận thành công!")
+        else:
+            print(f"      ⚠️ [AUTO DOUBLE-CHECK CẢNH BÁO]: Chưa tìm thấy bản ghi lịch sử, vui lòng kiểm tra lại!")
+
         return {"account": username, "status": "Đã chuyển xử lý", "members": len(dsdv), "idxuly": idxuly}
     else:
         print(f"[{idx}/{total}] {name} ({username}): [LỖI ❌] {res_sub.text}")

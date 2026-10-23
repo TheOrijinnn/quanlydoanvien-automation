@@ -43,10 +43,20 @@ CHIDOAN_ACCOUNTS = [
     ("Chi đoàn 23151FIE", "23151fie"),
     ("Chi đoàn 23161FIE", "23161fie"),
     ("Chi đoàn 23144FIE", "23144fie"),
-    # Khóa 22
-    ("Chi đoàn 22144FIE", "22144fie"),
+    # Khóa 22 (Đầy đủ 13 Chi đoàn)
+    ("Chi đoàn 22110FIE", "22110fie"),
+    ("Chi đoàn 22116FIE", "22116fie"),
+    ("Chi đoàn 22119FIE", "22119fie"),
+    ("Chi đoàn 22124FIE", "22124fie"),
+    ("Chi đoàn 22142FIE", "22142fie"),
     ("Chi đoàn 22143FIE", "22143fie"),
+    ("Chi đoàn 22144FIE", "22144fie"),
+    ("Chi đoàn 22145FIE", "22145fie"),
     ("Chi đoàn 22146FIE", "22146fie"),
+    ("Chi đoàn 22147FIE", "22147fie"),
+    ("Chi đoàn 22149FIE", "22149fie"),
+    ("Chi đoàn 22151FIE", "22151fie"),
+    ("Chi đoàn 22161FIE", "22161fie"),
     # Khóa 24
     ("Chi đoàn 24143FIE", "24143fie"),
     ("Chi đoàn 24146FIE", "24146fie"),

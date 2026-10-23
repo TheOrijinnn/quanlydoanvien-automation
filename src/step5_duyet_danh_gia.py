@@ -103,5 +103,14 @@ def main():
     print(f"Số tổ chức ĐÃ DUYỆT (TRANGTHAI = 2): {len(recheck_approved)} / {len(recheck_orgs)}")
     print(f"Số tổ chức CHƯA DUYỆT (TRANGTHAI = 1): {len(recheck_pending)}")
 
+    # --- TỰ ĐỘNG DOUBLE CHECK LẠI SỐ LIỆU ---
+    print("\n" + "-" * 80)
+    if len(recheck_approved) == len(recheck_orgs):
+        print("🔍 [AUTO DOUBLE-CHECK HOÀN TẤT ✅]: 100% Chi đoàn trực thuộc đã được phê duyệt thành công!")
+    else:
+        print(f"⚠️ [AUTO DOUBLE-CHECK CẢNH BÁO]: Còn {len(recheck_pending)} chi đoàn chưa được duyệt:")
+        for po in recheck_pending:
+            print(f"   • {po.get('TENTOCHUC')} (ID: {po.get('ID')})")
+
 if __name__ == "__main__":
     main()

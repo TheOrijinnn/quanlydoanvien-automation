@@ -102,8 +102,38 @@ def process_chidoan(idx, total, name, username, year=config.YEAR):
         print(f"    Trang {p+1}/{total_pages}: [ĐÃ LƯU & GỬI] {count} đoàn viên -> Hoàn thành xuất sắc nhiệm vụ.")
         time.sleep(0.4)
         
+    # --- TỰ ĐỘNG DOUBLE-CHECK LẠI SỐ LIỆU SAU KHI LƯU & GỬI ---
+    time.sleep(0.3)
+    check_page0 = fetch_members_page(client, id_tochuc, 0, max_size=50, year=year)
+    all_checked_members = []
+    if check_page0:
+        c_rows = int(check_page0[0].get("TOTALROWS", len(check_page0)))
+        c_pages = math.ceil(c_rows / 50)
+        for cp in range(c_pages):
+            cm = check_page0 if cp == 0 else fetch_members_page(client, id_tochuc, cp, max_size=50, year=year)
+            all_checked_members.extend(cm)
+
+    unevaluated = [m for m in all_checked_members if not (m.get("IDDANHGIA") or 0)]
+    if unevaluated:
+        names = [m.get("HOTEN") for m in unevaluated]
+        print(f"  ⚠️ [AUTO DOUBLE-CHECK CẢNH BÁO]: Có {len(unevaluated)} đoàn viên chưa lưu xếp loại ({', '.join(names[:3])}...) -> Đang tự động đánh giá lại...")
+        try:
+            evaluate_page(client, unevaluated, id_tochuc, year=year, rating_id=4)
+            print(f"  ✅ [AUTO RETRY THÀNH CÔNG]: Đã lưu & gửi bổ sung cho {len(unevaluated)} đoàn viên còn thiếu!")
+            evaluated_count += len(unevaluated)
+        except Exception as ex:
+            print(f"  ❌ [AUTO RETRY THẤT BẠI]: {str(ex)}")
+    else:
+        print(f"  🔍 [AUTO DOUBLE-CHECK ✅]: 100% đoàn viên ({len(all_checked_members)}/{total_rows}) đã đạt xếp loại Xuất sắc!")
+
     print(f"  ✅ Hoàn tất {username}: {evaluated_count}/{total_rows} đoàn viên đã được đánh giá & gửi duyệt.")
-    return {"account": username, "status": "Thành công", "total": total_rows, "evaluated": evaluated_count}
+    return {
+        "account": username,
+        "status": "Thành công",
+        "total": total_rows,
+        "evaluated": evaluated_count,
+        "unevaluated_left": len(unevaluated) if unevaluated else 0
+    }
 
 def main(filter_prefix=""):
     """

@@ -93,5 +93,19 @@ def main():
 
     print(f"\n=> Kết quả: Đã duyệt thành công {success_count}/{len(pending_items)} yêu cầu!")
 
+    # --- TỰ ĐỘNG DOUBLE CHECK LẠI SỐ LIỆU ---
+    print("\n" + "-" * 80)
+    time.sleep(1)
+    recheck_r = admin_client.session.post(url_ds, data=body_ds, headers=headers, timeout=25)
+    if recheck_r.status_code == 200:
+        re_items = recheck_r.json()
+        re_pending = [it for it in re_items if it.get('TRANGTHAI') == 'Đang xử lý']
+        if not re_pending:
+            print("🔍 [AUTO DOUBLE-CHECK HOÀN TẤT ✅]: Toàn bộ hồ sơ cấp thẻ đã được xử lý duyệt xong, không còn tồn đọng!")
+        else:
+            print(f"⚠️ [AUTO DOUBLE-CHECK CẢNH BÁO]: Còn {len(re_pending)} hồ sơ cấp thẻ vẫn ở trạng thái 'Đang xử lý'!")
+    else:
+        print(f"⚠️ [AUTO DOUBLE-CHECK LỖI]: Không thể tải lại danh sách kiểm tra ({recheck_r.status_code})")
+
 if __name__ == "__main__":
     main()
