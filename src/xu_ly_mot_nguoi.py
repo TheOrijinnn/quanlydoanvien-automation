@@ -16,7 +16,8 @@ def remove_accents(input_str):
         return ""
     s1 = unicodedata.normalize('NFD', input_str)
     s2 = "".join([c for c in s1 if unicodedata.category(c) != 'Mn'])
-    return s2.replace('đ', 'd').replace('Đ', 'D').lower().strip()
+    cleaned = s2.replace('đ', 'd').replace('Đ', 'D').lower()
+    return " ".join(cleaned.split())
 
 def find_account_by_class(class_name):
     norm_input = remove_accents(class_name).replace("chi doan", "").replace("chidoan", "").replace(" ", "").strip()
