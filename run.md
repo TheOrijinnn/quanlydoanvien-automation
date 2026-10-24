@@ -1,33 +1,46 @@
-# 📖 HƯỚNG DẪN DÀNH CHO NGƯỜI MỚI (LOW-TECH)
+# 📖 HƯỚNG DẪN DÀNH CHO NGƯỜI DÙNG (LOW-TECH)
 
 Tài liệu này được viết theo cách **đơn giản nhất**, ai cũng có thể làm được chỉ với **1 cú click chuột**, không cần biết lập trình hay gõ lệnh phức tạp.
 
 ---
 
-## ⚡ CÁCH CHẠY (CHỌN 1 TRONG 2 CÁCH):
+## ⚡ CÁC BƯỚC THỰC HIỆN:
 
-### Cách 1: Dùng Menu điều khiển trực quan (Khuyên dùng)
-👉 **Click đúp chuột vào:** **`MENU_LUA_CHON.bat`**  
-
-Màn hình đen sẽ hiện ra Menu với các con số rất dễ chọn:
-* Nhập **`1`** rồi Enter: Chạy tự động rèn luyện cho các Chi đoàn (đăng ký, chấm 100đ, chuyển cấp trên).
-* Nhập **`2`** rồi Enter: Đoàn cơ sở (admin `yfie.hcmute`) duyệt 56 trang rèn luyện.
-* Nhập **`3`** rồi Enter: Kiểm tra đối soát tiến độ rèn luyện (xem còn ai thiếu không).
-* Nhập **`4`** rồi Enter: Đánh giá xếp loại đoàn viên xuất sắc 100% (tự động phân trang, lưu & gửi).
-* Nhập **`5`** rồi Enter: Đoàn cơ sở duyệt nhận xét đánh giá đoàn viên.
-* Nhập **`6`** rồi Enter: Các Chi đoàn trình cấp mới thẻ đoàn viên (chọn toàn bộ đoàn viên).
-* Nhập **`7`** rồi Enter: Đoàn cơ sở duyệt cấp thẻ đoàn viên.
-* Nhập **`8`** rồi Enter: **Thống kê & Báo cáo số liệu toàn diện** (xem tổng số đoàn viên, tỷ lệ hoàn thành, xuất file JSON).
-* Nhập **`9`** rồi Enter: **Chạy Double-Check kiểm tra & đối soát chéo** (so sánh số liệu giữa các nghiệp vụ).
-* Nhập **`10`** rồi Enter: **CHẠY TẤT CẢ** các bước từ đầu đến cuối hoàn toàn tự động (kèm Auto Double-Check).
-* Nhập **`11`** rồi Enter: **Xử lý đơn lẻ 1 người** (Điền Tên + MSSV + Lớp để tự động đánh giá xuất sắc & cấp thẻ ngay cho 1 bạn mới thêm).
-* Nhập **`0`** rồi Enter: Thoát chương trình.
+### BƯỚC 1: Cài đặt môi trường (Chỉ làm 1 lần đầu tiên)
+👉 **Click đúp chuột vào:** **`SETUP_MOI_TRUONG.bat`**  
+- Hệ thống sẽ tự động kiểm tra Python, nâng cấp `pip`, và tự cài đặt 100% các thư viện cần thiết.
+- Khi cài xong, chương trình sẽ tự động mở luôn **`MENU_LUA_CHON.bat`** cho bạn.
 
 ---
 
-### Cách 2: Chạy 1 mạch toàn bộ
-👉 **Click đúp chuột vào:** **`CHAY_TU_DONG.bat`**  
-Mọi thứ còn lại máy tính sẽ tự làm từ đầu đến cuối và in tiến trình `[1/73]...` trên màn hình. Khi xong máy sẽ không tự tắt để bạn đọc kết quả.
+### BƯỚC 2: Mở Menu điều khiển để chọn chức năng
+👉 **Click đúp chuột vào:** **`MENU_LUA_CHON.bat`**  
+
+Màn hình sẽ hiển thị Menu điều khiển gồm 4 giai đoạn chuẩn hóa:
+
+#### --- [GIAI ĐOẠN 1]: DUYỆT APP + CHƯƠNG TRÌNH RÈN LUYỆN ĐOÀN VIÊN ---
+* Nhập **`1`** rồi Enter: Bước 0 - Quét & Duyệt đoàn viên từ App Thanh niên Việt Nam (Chờ duyệt).
+* Nhập **`2`** rồi Enter: Bước 1 - Chi đoàn Đăng ký (31 tiêu chí), Chấm 100 điểm & Chuyển cấp trên.
+* Nhập **`3`** rồi Enter: Bước 2 - Đoàn cơ sở (`yfie.hcmute`) duyệt xác nhận rèn luyện.
+* Nhập **`4`** rồi Enter: 🔍 **Double Check Giai đoạn 1** - Đối soát CSDL rèn luyện đoàn viên.
+
+#### --- [GIAI ĐOẠN 2]: NGHIỆP VỤ CẤP THẺ ĐOÀN VIÊN ---
+* Nhập **`5`** rồi Enter: Bước 6 - Chi đoàn lập tờ trình cấp thẻ (Cả Cấp mới & Cấp lại thẻ).
+* Nhập **`6`** rồi Enter: Bước 7 - Đoàn cơ sở (`yfie.hcmute`) duyệt chuyển tiếp cấp thẻ lên Đoàn trường.
+* Nhập **`7`** rồi Enter: 🔍 **Double Check Giai đoạn 2** - Đối soát số liệu cấp thẻ đoàn viên.
+
+#### --- [GIAI ĐOẠN 3]: ĐÁNH GIÁ XẾP LOẠI ĐOÀN VIÊN ---
+* Nhập **`8`** rồi Enter: Bước 4 - Chi đoàn đánh giá xếp loại "Hoàn thành xuất sắc nhiệm vụ".
+* Nhập **`9`** rồi Enter: Bước 5 - Đoàn cơ sở (`yfie.hcmute`) duyệt nhận xét xếp loại đoàn viên.
+* Nhập **`10`** rồi Enter: 🔍 **Double Check Giai đoạn 3** - Đối soát số liệu đánh giá xếp loại.
+
+#### --- [TÙY CHỌN ĐƠN LẺ CHO 1 NGƯỜI (CHỈ CẦN TÊN + LỚP)] ---
+* Nhập **`11`** rồi Enter: **Xử lý trọn gói 1 người** (Chỉ cần điền Tên + Lớp ➔ Hệ thống tự Duyệt App ➔ Rèn luyện 100đ ➔ Cấp thẻ đoàn ➔ Đánh giá xuất sắc).
+
+#### --- [CHẠY TỰ ĐỘNG HOÀN TOÀN TẤT CẢ CÁC BƯỚC] ---
+* Nhập **`12`** rồi Enter: **CHẠY TẤT CẢ TỰ ĐỘNG** theo đúng luồng chuẩn hóa kèm Auto Double-Check sau mỗi bước.
+* Nhập **`13`** rồi Enter: Xuất báo cáo thống kê tổng hợp toàn khoa (Full Audit).
+* Nhập **`0`** rồi Enter: Thoát chương trình.
 
 ---
 
@@ -38,7 +51,7 @@ Mọi thứ còn lại máy tính sẽ tự làm từ đầu đến cuối và i
    Mở file vừa tải về lên. Ở màn hình đầu tiên, **TÍCH CHỌN VÀO Ô:**  
    ☑️ **"Add python.exe to PATH"** *(ở góc dưới cùng)*.
 3. **Bước 3:** Bấm nút **"Install Now"** cho máy chạy xong thì bấm Close.
-4. **Bước 4:** Bấm chạy lại file **`MENU_LUA_CHON.bat`** là xong!
+4. **Bước 4:** Bấm chạy lại file **`SETUP_MOI_TRUONG.bat`** là xong!
 
 ---
 
