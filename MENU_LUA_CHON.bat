@@ -43,13 +43,14 @@ echo   [9] Tùy chọn: Chạy kiểm tra ^& Đối soát chéo số liệu (Dou
 echo.
 echo   --- TÍNH NĂNG NHANH CHO 1 ĐOÀN VIÊN MỚI THÊM ---
 echo   [11] Xử lý đơn lẻ 1 người: Điền Tên + MSSV + Lớp (Tự động Đánh giá ^& Cấp thẻ)
+echo   [12] Quét ^& Duyệt đoàn viên từ App TNVN + Đồng bộ trọn gói nghiệp vụ toàn bộ K26
 echo.
 echo   --- CHẠY TỰ ĐỘNG HOÀN TOÀN ---
 echo   [10] CHẠY TẤT CẢ CÁC BƯỚC TỰ ĐỘNG (Bao gồm Auto Double-Check toàn diện)
 echo   [0] Thoát
 echo.
 echo ===============================================================================
-set /p choice="Nhập lựa chọn của bạn (0-11) rồi bấm Enter: "
+set /p choice="Nhập lựa chọn của bạn (0-12) rồi bấm Enter: "
 
 if "%choice%"=="1" goto B1
 if "%choice%"=="2" goto B2
@@ -62,6 +63,7 @@ if "%choice%"=="8" goto THONG_KE
 if "%choice%"=="9" goto DOUBLE_CHECK
 if "%choice%"=="10" goto CHAY_HET
 if "%choice%"=="11" goto XU_LY_DON_LE
+if "%choice%"=="12" goto DUYET_APP_K26
 if "%choice%"=="0" exit /b
 
 echo Lựa chọn không hợp lệ, vui lòng chọn lại!
@@ -149,6 +151,13 @@ goto MENU
 :XU_LY_DON_LE
 cls
 python xu_ly_mot_nguoi.py
+echo.
+pause
+goto MENU
+
+:DUYET_APP_K26
+cls
+python duyet_app_va_dong_bo_k26.py
 echo.
 pause
 goto MENU
