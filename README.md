@@ -40,6 +40,9 @@ quanlydoanvien-automation/
     │   --- Bổ sung: Thống kê & Double-Check toàn diện ---
     ├── step8_thong_ke_bao_cao.py   # Bước 8: Tùy chọn xuất thống kê Dashboard & Auto Double-Check đối soát chéo
     │
+    │   --- Tính năng nhanh cho 1 đoàn viên mới thêm ---
+    ├── xu_ly_mot_nguoi.py          # Xử lý đơn lẻ 1 người: Điền Tên + MSSV + Lớp (Tự động Đánh giá & Cấp thẻ)
+    │
     ├── run_all.py        # Script chạy chuỗi toàn bộ tất cả nghiệp vụ tự động (kèm Auto Double-Check)
     ├── requirements.txt  # Thư viện phụ thuộc (`requests`, `cryptography`)
     ├── audit_report.json # File báo cáo kết quả đối soát chi tiết
@@ -63,6 +66,7 @@ quanlydoanvien-automation/
   * `[8]` Tùy chọn: Thống kê & Xuất báo cáo tổng hợp toàn khoa
   * `[9]` Tùy chọn: Chạy kiểm tra & Đối soát chéo số liệu (Double-Check Audit)
   * `[10]` CHẠY TẤT CẢ CÁC BƯỚC TỰ ĐỘNG (Bao gồm Auto Double-Check toàn diện)
+  * `[11]` Xử lý đơn lẻ 1 người: Điền Tên + MSSV + Lớp (Tự động Đánh giá & Cấp thẻ)
   * `[0]` Thoát
 - Hoặc click đúp vào **`CHAY_TU_DONG.bat`** để chạy từ đầu đến cuối một mạch.
 

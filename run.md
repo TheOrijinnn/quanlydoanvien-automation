@@ -20,6 +20,7 @@ Màn hình đen sẽ hiện ra Menu với các con số rất dễ chọn:
 * Nhập **`8`** rồi Enter: **Thống kê & Báo cáo số liệu toàn diện** (xem tổng số đoàn viên, tỷ lệ hoàn thành, xuất file JSON).
 * Nhập **`9`** rồi Enter: **Chạy Double-Check kiểm tra & đối soát chéo** (so sánh số liệu giữa các nghiệp vụ).
 * Nhập **`10`** rồi Enter: **CHẠY TẤT CẢ** các bước từ đầu đến cuối hoàn toàn tự động (kèm Auto Double-Check).
+* Nhập **`11`** rồi Enter: **Xử lý đơn lẻ 1 người** (Điền Tên + MSSV + Lớp để tự động đánh giá xuất sắc & cấp thẻ ngay cho 1 bạn mới thêm).
 * Nhập **`0`** rồi Enter: Thoát chương trình.
 
 ---
