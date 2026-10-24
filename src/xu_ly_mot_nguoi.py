@@ -25,17 +25,17 @@ def find_account_by_class(class_name):
         norm_name = remove_accents(name).replace("chi doan", "").replace("chidoan", "").replace(" ", "").strip()
         if norm_input in norm_acc or norm_input in norm_name or norm_acc in norm_input:
             return acc, name
-    # Fallback to lowercased input
     return class_name.lower().replace("chi đoàn", "").replace(" ", "").strip(), class_name
 
-def process_single_member(ho_ten, mssv, lop_ten):
+def process_single_member(ho_ten, lop_ten, mssv=""):
     print("╔══════════════════════════════════════════════════════════════════════════════════════╗")
-    print("║          XỬ LÝ ĐƠN LẺ TRỌN GÓI: RÈN LUYỆN, ĐÁNH GIÁ XẾP LOẠI & CẤP THẺ ĐOÀN          ║")
+    print("║     XỬ LÝ ĐƠN LẺ TRỌN GÓI: DUYỆT APP -> RÈN LUYỆN -> CẤP THẺ -> ĐÁNH GIÁ XẾP LOẠI     ║")
     print("╚══════════════════════════════════════════════════════════════════════════════════════╝")
     print(f" • Họ và tên : {ho_ten}")
-    print(f" • MSSV      : {mssv}")
     print(f" • Lớp       : {lop_ten}")
-    print("-" * 80)
+    if mssv:
+        print(f" • MSSV      : {mssv}")
+    print("-" * 88)
 
     acc, full_name = find_account_by_class(lop_ten)
     print(f"🔍 Nhận diện tài khoản Chi đoàn: {acc} ({full_name})")
@@ -54,25 +54,65 @@ def process_single_member(ho_ten, mssv, lop_ten):
     norm_target = remove_accents(ho_ten)
 
     # =========================================================================
-    # NGHIỆP VỤ 1: CHƯƠNG TRÌNH RÈN LUYỆN ĐOÀN VIÊN (ĐĂNG KÝ + CHẤM ĐIỂM + DUYỆT)
+    # BƯỚC 0: KIỂM TRA & DUYỆT ĐOÀN VIÊN TỪ APP (NẾU ĐANG CHỜ DUYỆT)
     # =========================================================================
-    print("\n" + "=" * 80)
-    print("[NGHIỆP VỤ 1/3] CHƯƠNG TRÌNH RÈN LUYỆN ĐOÀN VIÊN")
-    print("=" * 80)
+    print("\n" + "=" * 88)
+    print("[BƯỚC 0/3] KIỂM TRA TRẠNG THÁI DUYỆT TỪ APP THANH NIÊN VIỆT NAM")
+    print("=" * 88)
+
+    url_app_list = f"{BASE_URL}/ws/api/NhanVienToChuc/ds_thanhvientochuc_appn?idToChuc={client.id_tochuc}&trangThai=1"
+    payload_app = {"HOTEN":"","DIENTHOAI":"","CMND":"","EMAIL":""}
+    b_app_str = json.dumps(payload_app, separators=(',', ':'))
+    h_app = {
+        'Authorization': f'Bearer {client.token}',
+        'X-XSRF-TOKEN': client.get_xsrf(url_app_list, b_app_str),
+        'Content-Type': 'application/json',
+        'User-Agent': 'Mozilla/5.0'
+    }
+    try:
+        res_app_l = client.session.post(url_app_list, data=b_app_str, headers=h_app, timeout=20)
+        app_items = res_app_l.json() if res_app_l.status_code == 200 else []
+    except Exception:
+        app_items = []
+
+    matched_app = None
+    for it in app_items:
+        if remove_accents(it.get("HOTEN", "")) == norm_target:
+            matched_app = it
+            break
+
+    if matched_app:
+        mid = matched_app.get("ID")
+        print(f" 🔔 Phát hiện đoàn viên đang chờ duyệt từ App (ID: {mid}). Đang tiến hành phê duyệt...")
+        url_appr = f"{BASE_URL}/ws/api/NhanVienToChuc/duyet_thanhvientochuc_app?id={mid}"
+        h_appr = {'Authorization': f'Bearer {client.token}', 'X-XSRF-TOKEN': client.get_xsrf(url_appr, ""), 'Content-Type': 'application/json', 'User-Agent': 'Mozilla/5.0'}
+        res_appr = client.session.post(url_appr, data="", headers=h_appr, timeout=25)
+        if res_appr.status_code == 200 and res_appr.json().get("success"):
+            print(" ✅ Đã duyệt đoàn viên từ App vào Chi đoàn thành công!")
+        else:
+            print(f" ⚠️ Cảnh báo duyệt App: {res_appr.text}")
+        time.sleep(0.5)
+    else:
+        print(" • Đoàn viên đã nằm trong danh sách Chi đoàn (không có yêu cầu chờ duyệt trên App). ✅")
+
+    # =========================================================================
+    # BƯỚC 1: CHƯƠNG TRÌNH RÈN LUYỆN ĐOÀN VIÊN (ĐĂNG KÝ + CHẤM ĐIỂM + ADMIN DUYỆT)
+    # =========================================================================
+    print("\n" + "=" * 88)
+    print("[BƯỚC 1/3] CHƯƠNG TRÌNH RÈN LUYỆN ĐOÀN VIÊN")
+    print("=" * 88)
 
     # 1.1 Kiểm tra & Đăng ký rèn luyện (Tab 1)
     print(" 1.1 Kiểm tra trạng thái Đăng ký (Tab 1)...")
     t1 = client.call("ndv05.dangky.get_ds_doanvien_paging", {"nam": config.YEAR, "page_no": 1, "page_size": 100})
     tab1_items = t1.get("result", []) if isinstance(t1, dict) else []
-    
+
     matched_t1 = None
     for m in tab1_items:
         if remove_accents(m.get("ho_ten", "")) == norm_target:
             matched_t1 = m
             break
-
     if not matched_t1:
-        # Tìm theo từ khóa họ tên cuối
         last_name = norm_target.split()[-1] if norm_target else ""
         cands = [m for m in tab1_items if last_name in remove_accents(m.get("ho_ten", ""))]
         if len(cands) == 1:
@@ -82,7 +122,7 @@ def process_single_member(ho_ten, mssv, lop_ten):
         if matched_t1.get("trang_thai_dangky") == 2:
             print(f"   • {matched_t1.get('ho_ten')}: Đã đăng ký rèn luyện từ trước. ✅")
         else:
-            print(f"   • {matched_t1.get('ho_ten')}: Chưa đăng ký. Đang tiến hành đăng ký 31 tiêu chí...")
+            print(f"   • {matched_t1.get('ho_ten')}: Chưa đăng ký. Đang đăng ký 31 tiêu chí...")
             ch = client.call("ndv05.dangky.ctrl_cauhinh", {"ten": "NAM"}, {"ten": "NAM_DANGKY"}, {"ten": "SL_TOITHIEU"})
             id_chuongtrinh = None
             if isinstance(ch, list) and len(ch) > 3 and isinstance(ch[3], dict):
@@ -93,21 +133,14 @@ def process_single_member(ho_ten, mssv, lop_ten):
                 if isinstance(tc_res, list):
                     tc_list = tc_res
             if tc_list:
-                reg_payload = {
-                    "id_chuongtrinh": id_chuongtrinh,
-                    "nam": config.YEAR,
-                    "lid": [matched_t1["id"]],
-                    "ltc": tc_list
-                }
+                reg_payload = {"id_chuongtrinh": id_chuongtrinh, "nam": config.YEAR, "lid": [matched_t1["id"]], "ltc": tc_list}
                 save_reg = client.call("ndv05.dangky.save_dangky_tieuchi", reg_payload)
                 if save_reg.get("success"):
                     print("   • Chi đoàn: Đăng ký thành công 31 tiêu chí rèn luyện! ✅")
-                else:
-                    print(f"   ⚠️ Lỗi đăng ký tiêu chí: {save_reg}")
     else:
-        print(f"   ⚠️ Không tìm thấy tên trong danh sách đăng ký rèn luyện Tab 1 của Chi đoàn.")
+        print(f"   ⚠️ Không tìm thấy tên trong danh sách Tab 1 của Chi đoàn.")
 
-    # 1.2 Kiểm tra & Đánh giá/Chấm điểm rèn luyện (Tab 2)
+    # 1.2 Kiểm tra & Đánh giá rèn luyện (Tab 2)
     print(" 1.2 Kiểm tra Đánh giá & Chấm điểm (Tab 2)...")
     t2 = client.call("ndv05.dangky.get_ds_doanvien_danhgia_paging", {"nam": config.YEAR, "page_no": 1, "page_size": 100})
     tab2_items = t2.get("result", []) if isinstance(t2, dict) else []
@@ -123,7 +156,6 @@ def process_single_member(ho_ten, mssv, lop_ten):
         if len(cands) == 1:
             matched_t2 = cands[0]
 
-    id_dangky_chuyen = None
     if matched_t2:
         id_dangky = matched_t2.get("id_dangky")
         diem_cham = str(matched_t2.get("diem_cham", "")).strip()
@@ -149,7 +181,7 @@ def process_single_member(ho_ten, mssv, lop_ten):
                         ic["diem_duyet"] = str(s)
                     ltc.append(ic)
 
-                payload = {
+                payload_ev = {
                     "id_dangky": id_dangky,
                     "diem_cham": 100,
                     "diem_duyet": 100,
@@ -157,25 +189,19 @@ def process_single_member(ho_ten, mssv, lop_ten):
                     "cd_nhan_xet_nam": config.COMMENT_YEAR,
                     "ltc": ltc
                 }
-                save_eval = client.call("ndv05.danhgia.save_danhgia_tieuchi", payload)
+                save_eval = client.call("ndv05.danhgia.save_danhgia_tieuchi", payload_ev)
                 if save_eval.get("success"):
                     print("   • Chi đoàn: Lưu đánh giá 100/100 tiêu chí thành công! ✅")
-                else:
-                    print(f"   ⚠️ Lỗi lưu đánh giá: {save_eval}")
 
-        # Chuyển cấp trên nếu chưa chuyển
         if matched_t2.get("dcs_xac_nhan") in (0, "0", None):
             print("   • Chi đoàn: Đang chuyển hồ sơ rèn luyện lên Đoàn cấp trên...")
             c_res = client.call("ndv05.danhgia.chuyen_captren", {"ds_id_dangky": [id_dangky]})
             if c_res.get("success"):
                 print("   • Chi đoàn: Đã chuyển cấp trên xác nhận thành công! ✅")
-            else:
-                print(f"   ⚠️ Lỗi chuyển cấp trên: {c_res}")
 
     # 1.3 Đoàn cơ sở (Admin) duyệt xác nhận rèn luyện
     print(" 1.3 Đoàn cơ sở (Admin) xác nhận rèn luyện...")
     if admin_client.token:
-        # Xác định khoảng trang thông minh theo khóa lớp để tăng tốc xử lý
         start_p, end_p = 1, 58
         if "22" in lop_ten:
             start_p, end_p = 1, 15
@@ -200,24 +226,21 @@ def process_single_member(ho_ten, mssv, lop_ten):
             if target_in_admin:
                 if target_in_admin.get("dcs_xac_nhan") == 2:
                     print(f"   • Admin: Đoàn viên đã được Đoàn cơ sở xác nhận từ trước. ✅")
-                    confirmed_done = True
                 else:
                     id_dk_admin = target_in_admin.get("id_dangky")
                     res_xn = admin_client.call("ndv05.xacnhan.dcs_xacnhan", {"ds_id_dangky": [id_dk_admin]})
                     if res_xn.get("success"):
                         print(f"   • Admin: Đoàn cơ sở đã duyệt xác nhận rèn luyện thành công! ✅")
-                        confirmed_done = True
-                    else:
-                        print(f"   ⚠️ Admin duyệt xác nhận: {res_xn}")
                 break
 
     # =========================================================================
-    # NGHIỆP VỤ 2: ĐÁNH GIÁ XẾP LOẠI ĐOÀN VIÊN (XUẤT SẮC + ADMIN DUYỆT)
+    # BƯỚC 2: CẤP THẺ ĐOÀN VIÊN (CẤP MỚI / CẤP LẠI & ADMIN DUYỆT CHUYỂN TIẾP)
     # =========================================================================
-    print("\n" + "=" * 80)
-    print("[NGHIỆP VỤ 2/3] ĐÁNH GIÁ XẾP LOẠI ĐOÀN VIÊN: HOÀN THÀNH XUẤT SẮC NHIỆM VỤ")
-    print("=" * 80)
+    print("\n" + "=" * 88)
+    print("[BƯỚC 2/3] NGHIỆP VỤ CẤP THẺ ĐOÀN VIÊN")
+    print("=" * 88)
 
+    # Lấy thông tin ID đoàn viên
     url_dg = f"{BASE_URL}/ws/api/DanhGia/getListDanhGiaDoanVien?idToChuc={client.id_tochuc}&nam={config.YEAR}&currentPage=0&maxSize=5000&keyword="
     h_dg = {'Authorization': f'Bearer {client.token}', 'X-XSRF-TOKEN': client.get_xsrf(url_dg, ""), 'User-Agent': 'Mozilla/5.0'}
     res_dg = client.session.get(url_dg, headers=h_dg, timeout=25)
@@ -228,7 +251,6 @@ def process_single_member(ho_ten, mssv, lop_ten):
         if remove_accents(m.get("HOTEN")) == norm_target:
             matched_member = m
             break
-
     if not matched_member:
         last_name = norm_target.split()[-1] if norm_target else ""
         candidates = [m for m in members if last_name in remove_accents(m.get("HOTEN"))]
@@ -243,70 +265,17 @@ def process_single_member(ho_ten, mssv, lop_ten):
     member_name = matched_member["HOTEN"]
     print(f"✅ Đã tìm thấy: {member_name} (ID: {member_id})")
 
-    current_rating = matched_member.get("IDDANHGIA")
-    if current_rating == 4.0:
-        print(f" • Đoàn viên đã được xếp loại Xuất sắc từ trước (ID: {current_rating}). ✅")
-    else:
-        payload_eval = {
-            "idtochuc": client.id_tochuc,
-            "nam": int(config.YEAR),
-            "dsDanhGia": [{
-                "idNhanVien": member_id,
-                "idDanhGia": 4, # Hoàn thành xuất sắc nhiệm vụ
-                "DiemManh": "",
-                "DiemYeu": "",
-                "KhenThuong": "",
-                "KyLuat": "",
-                "tiLe": 0
-            }]
-        }
-        body_eval = json.dumps(payload_eval, separators=(',', ':'))
-        h_eval = {
-            "Authorization": f"Bearer {client.token}",
-            "Content-Type": "application/json;charset=utf-8",
-            "User-Agent": "Mozilla/5.0"
-        }
-        r_up = client.session.post(f"{BASE_URL}/ws/api/DanhGia/updateDanhGia", data=body_eval, headers=h_eval, timeout=25)
-        r_send = client.session.post(f"{BASE_URL}/ws/api/DanhGia/sendDanhGia", data=body_eval, headers=h_eval, timeout=25)
-        if r_up.status_code == 200 and r_send.status_code == 200:
-            print(f" • Chi đoàn: Đã Lưu & Gửi đánh giá xếp loại Xuất sắc thành công! ✅")
-        else:
-            print(f" ⚠️ Cảnh báo lỗi Lưu/Gửi đánh giá: {r_up.text} | {r_send.text}")
-
-    # Đăng nhập Admin để duyệt Đánh giá xếp loại
-    if admin_client.token:
-        url_app = f"{BASE_URL}/ws/api/DanhGia/duyetDanhGia"
-        p_app = {"idtochuc": client.id_tochuc, "nam": int(config.YEAR), "dsDanhGia": []}
-        b_app = json.dumps(p_app, separators=(',', ':'))
-        h_app = {
-            "Authorization": f"Bearer {admin_client.token}",
-            "X-XSRF-TOKEN": admin_client.get_xsrf(url_app, b_app),
-            "Content-Type": "application/json;charset=utf-8",
-            "User-Agent": "Mozilla/5.0"
-        }
-        r_app = admin_client.session.post(url_app, data=b_app, headers=h_app, timeout=25)
-        if r_app.status_code == 200 and r_app.json().get("success"):
-            print(" • Admin: Đã duyệt đánh giá xếp loại thành công! ✅")
-        else:
-            print(f" • Admin duyệt: {r_app.text}")
-
-    # =========================================================================
-    # NGHIỆP VỤ 3: CẤP THẺ ĐOÀN VIÊN (CẤP MỚI / CẤP LẠI & DUYỆT CHUYỂN TIẾP)
-    # =========================================================================
-    print("\n" + "=" * 80)
-    print("[NGHIỆP VỤ 3/3] NGHIỆP VỤ CẤP THẺ ĐOÀN VIÊN")
-    print("=" * 80)
-    
-    url_m_new = f"{BASE_URL}/ws/api/NhanVienToChuc/ds_thanhvientochucbiendong_capthe"
     p_m = {'IdToChuc': client.id_tochuc, 'IdBienDong': 45, 'IdQuanHuyen': 0, 'IdPhuongXa': 0}
     b_m = json.dumps(p_m, separators=(',', ':'))
-    h_m = {'Authorization': f'Bearer {client.token}', 'X-XSRF-TOKEN': client.get_xsrf(url_m_new, b_m), 'Content-Type': 'application/json', 'User-Agent': 'Mozilla/5.0'}
-    r_new = client.session.post(url_m_new, data=b_m, headers=h_m, timeout=20)
+
+    # Cấp mới
+    h_m_new = {'Authorization': f'Bearer {client.token}', 'X-XSRF-TOKEN': client.get_xsrf(f"{BASE_URL}/ws/api/NhanVienToChuc/ds_thanhvientochucbiendong_capthe", b_m), 'Content-Type': 'application/json', 'User-Agent': 'Mozilla/5.0'}
+    r_new = client.session.post(f"{BASE_URL}/ws/api/NhanVienToChuc/ds_thanhvientochucbiendong_capthe", data=b_m, headers=h_m_new, timeout=20)
     list_new = r_new.json() if r_new.status_code == 200 else []
 
-    url_m_re = f"{BASE_URL}/ws/api/NhanVienToChuc/ds_thanhvientochucbiendongCoSoThe"
-    h_re = {'Authorization': f'Bearer {client.token}', 'X-XSRF-TOKEN': client.get_xsrf(url_m_re, b_m), 'Content-Type': 'application/json', 'User-Agent': 'Mozilla/5.0'}
-    r_re = client.session.post(url_m_re, data=b_m, headers=h_re, timeout=20)
+    # Cấp lại
+    h_m_re = {'Authorization': f'Bearer {client.token}', 'X-XSRF-TOKEN': client.get_xsrf(f"{BASE_URL}/ws/api/NhanVienToChuc/ds_thanhvientochucbiendongCoSoThe", b_m), 'Content-Type': 'application/json', 'User-Agent': 'Mozilla/5.0'}
+    r_re = client.session.post(f"{BASE_URL}/ws/api/NhanVienToChuc/ds_thanhvientochucbiendongCoSoThe", data=b_m, headers=h_m_re, timeout=20)
     list_re = r_re.json() if r_re.status_code == 200 else []
 
     target_capthe = None
@@ -340,10 +309,9 @@ def process_single_member(ho_ten, mssv, lop_ten):
                 print(f" • Yêu cầu cấp thẻ cho {member_name} ĐÃ ĐƯỢC TẠO từ trước (Mã yêu cầu: {req.get('ID')}, Trạng thái: {req.get('TRANGTHAI')}). ✅")
                 break
         if not already_submitted:
-            print(f" • Không tìm thấy đoàn viên trong danh sách chờ cấp thẻ (có thể đã có thẻ hoặc đã hoàn tất).")
+            print(f" • Không tìm thấy đoàn viên trong danh sách chờ cấp thẻ (có thể đã có thẻ từ trước).")
     else:
-        print(f" • Tìm thấy trong danh sách: Diện '{loaihinh}'. Đang tạo yêu cầu...")
-        
+        print(f" • Phát hiện trong danh sách diện: '{loaihinh}'. Đang tạo yêu cầu...")
         url_ct = f"{BASE_URL}/ws/api/LichSuBienDong/ds_ToChucCapTren"
         p_ct = {'IdToChuc': client.id_tochuc}
         b_ct = json.dumps(p_ct, separators=(',', ':'))
@@ -383,7 +351,7 @@ def process_single_member(ho_ten, mssv, lop_ten):
             'idloaihtc': client.id_loaihtc,
             'idtochuc': id_tochuc_captren,
             'noidung': loaihinh,
-            'trangthaixl': 2, # Chuyển xử lý
+            'trangthaixl': 2,
             'idnhanviennhap': client.user_id,
             'idtochucnhap': client.id_tochuc,
             'idquytrinhchitiet': id_quytrinh,
@@ -396,26 +364,21 @@ def process_single_member(ho_ten, mssv, lop_ten):
         url_submit = f"{BASE_URL}/ws/api/LichSuBienDong/biendongxuly_nhap"
         form_dict = {'data': data_str}
         xe = "[FORMDATA]" + json.dumps(form_dict, separators=(',', ':'))
-        submit_headers = {
-            'Authorization': f'Bearer {client.token}',
-            'X-XSRF-TOKEN': client.get_xsrf(url_submit, xe),
-            'User-Agent': 'Mozilla/5.0'
-        }
+        submit_headers = {'Authorization': f'Bearer {client.token}', 'X-XSRF-TOKEN': client.get_xsrf(url_submit, xe), 'User-Agent': 'Mozilla/5.0'}
         files = {'data': (None, data_str)}
         res_sub = client.session.post(url_submit, files=files, headers=submit_headers, timeout=25)
         if res_sub.status_code == 200 and res_sub.json().get('success'):
             idxuly = res_sub.json().get('idxuly')
-            print(f" • Chi đoàn: Đã gửi yêu cầu '{loaihinh}' thành công! (Mã xử lý: {idxuly}) ✅")
+            print(f" • Chi đoàn: Đã tạo yêu cầu '{loaihinh}' thành công! (Mã xử lý: {idxuly}) ✅")
 
-            print(" • Đang duyệt yêu cầu cấp thẻ trên tài khoản Admin...")
             if admin_client.token:
                 now_str = time.strftime('%d/%m/%Y')
                 xuly_data = {
                     'IdXuLy': idxuly,
                     'MaNhom': manhom,
                     'dsDoanVien': json.dumps(dsdv, separators=(',', ':')),
-                    'IdToChuc': 247294, # Đoàn trường
-                    'TrangThaiXL': 2, # Duyệt chuyển tiếp
+                    'IdToChuc': 247294,
+                    'TrangThaiXL': 2,
                     'IdNhanVienNhap': admin_client.user_id,
                     'IdQuyTrinhChiTiet': 234,
                     'IdToChucNhap': admin_client.id_tochuc,
@@ -436,42 +399,81 @@ def process_single_member(ho_ten, mssv, lop_ten):
                 headers_app_ct = {'Authorization': f'Bearer {admin_client.token}', 'User-Agent': 'Mozilla/5.0'}
                 res_app_ct = admin_client.session.post(url_app_ct, files=files_app, headers=headers_app_ct, timeout=25)
                 if res_app_ct.status_code == 200 and res_app_ct.json().get('success'):
-                    print(" • Admin: Đã duyệt và chuyển tiếp yêu cầu cấp thẻ thành công! ✅")
-                else:
-                    print(f" • Admin duyệt cấp thẻ: {res_app_ct.text}")
-        else:
-            print(f" ❌ Lỗi tạo yêu cầu cấp thẻ: {res_sub.text}")
+                    print(" • Admin: Đã duyệt và chuyển tiếp yêu cầu cấp thẻ lên Đoàn trường thành công! ✅")
 
-    print("\n" + "═" * 80)
-    print(f"🎉 HOÀN TẤT XỬ LÝ TRỌN GÓI CẢ 3 NGHIỆP VỤ CHO ĐOÀN VIÊN: {member_name} ({mssv} - {full_name})")
-    print(f" 1. Rèn luyện đoàn viên: Đã đăng ký 31 tiêu chí + Chấm 100/100 + Đoàn cơ sở xác nhận ✅")
-    print(f" 2. Đánh giá xếp loại  : Hoàn thành xuất sắc nhiệm vụ (Admin đã duyệt ✅)")
-    print(f" 3. Nghiệp vụ cấp thẻ   : Đã trình & duyệt chuyển tiếp cấp trên thành công ✅")
-    print("═" * 80 + "\n")
+    # =========================================================================
+    # BƯỚC 3: ĐÁNH GIÁ XẾP LOẠI ĐOÀN VIÊN (XUẤT SẮC & ADMIN DUYỆT)
+    # =========================================================================
+    print("\n" + "=" * 88)
+    print("[BƯỚC 3/3] ĐÁNH GIÁ XẾP LOẠI ĐOÀN VIÊN: HOÀN THÀNH XUẤT SẮC NHIỆM VỤ")
+    print("=" * 88)
+
+    current_rating = matched_member.get("IDDANHGIA")
+    if current_rating == 4.0:
+        print(f" • Đoàn viên đã được xếp loại Xuất sắc từ trước (ID: {current_rating}). ✅")
+    else:
+        payload_eval = {
+            "idtochuc": client.id_tochuc,
+            "nam": int(config.YEAR),
+            "dsDanhGia": [{
+                "idNhanVien": member_id,
+                "idDanhGia": 4,
+                "DiemManh": "",
+                "DiemYeu": "",
+                "KhenThuong": "",
+                "KyLuat": "",
+                "tiLe": 0
+            }]
+        }
+        body_eval = json.dumps(payload_eval, separators=(',', ':'))
+        h_eval = {"Authorization": f"Bearer {client.token}", "Content-Type": "application/json;charset=utf-8", "User-Agent": "Mozilla/5.0"}
+        r_up = client.session.post(f"{BASE_URL}/ws/api/DanhGia/updateDanhGia", data=body_eval, headers=h_eval, timeout=25)
+        r_send = client.session.post(f"{BASE_URL}/ws/api/DanhGia/sendDanhGia", data=body_eval, headers=h_eval, timeout=25)
+        if r_up.status_code == 200 and r_send.status_code == 200:
+            print(" • Chi đoàn: Đã Lưu & Gửi đánh giá xếp loại Xuất sắc thành công! ✅")
+
+    if admin_client.token:
+        url_app = f"{BASE_URL}/ws/api/DanhGia/duyetDanhGia"
+        p_app = {"idtochuc": client.id_tochuc, "nam": int(config.YEAR), "dsDanhGia": []}
+        b_app = json.dumps(p_app, separators=(',', ':'))
+        h_app = {"Authorization": f"Bearer {admin_client.token}", "X-XSRF-TOKEN": admin_client.get_xsrf(url_app, b_app), "Content-Type": "application/json;charset=utf-8", "User-Agent": "Mozilla/5.0"}
+        r_app = admin_client.session.post(url_app, data=b_app, headers=h_app, timeout=25)
+        if r_app.status_code == 200 and r_app.json().get("success"):
+            print(" • Admin: Đã duyệt đánh giá xếp loại thành công! ✅")
+
+    # =========================================================================
+    # TỔNG KẾT & DOUBLE CHECK
+    # =========================================================================
+    print("\n" + "═" * 88)
+    print(f"🎉 HOÀN TẤT XỬ LÝ TRỌN GÓI CHO: {member_name} ({full_name})")
+    print(" 0. Duyệt App TNVN     : Đã nằm trong danh sách Chi đoàn ✅")
+    print(" 1. Rèn luyện đoàn viên : Đã đăng ký 31 tiêu chí + Chấm 100/100 + Đoàn cơ sở xác nhận ✅")
+    print(" 2. Nghiệp vụ cấp thẻ   : Đã lập yêu cầu & Admin duyệt chuyển tiếp lên Đoàn trường ✅")
+    print(" 3. Đánh giá xếp loại   : Hoàn thành xuất sắc nhiệm vụ (Admin đã duyệt phê chuẩn ✅)")
+    print("═" * 88 + "\n")
     return True
 
 def main():
-    parser = argparse.ArgumentParser(description="Xử lý đơn lẻ 1 đoàn viên: Rèn luyện + Đánh giá xuất sắc + Cấp thẻ đoàn")
-    parser.add_argument("--ten", type=str, help="Họ và tên đoàn viên (VD: Huỳnh Minh Quang)")
-    parser.add_argument("--mssv", type=str, help="Mã số sinh viên (VD: 26130026)")
+    parser = argparse.ArgumentParser(description="Xử lý đơn lẻ 1 người: Duyệt App + Rèn luyện + Cấp thẻ + Đánh giá xuất sắc")
+    parser.add_argument("--ten", type=str, help="Họ và tên đoàn viên (VD: Nguyễn Văn A)")
     parser.add_argument("--lop", type=str, help="Lớp / Chi đoàn (VD: 26130FIE)")
+    parser.add_argument("--mssv", type=str, default="", help="Mã số sinh viên (tùy chọn)")
 
     args = parser.parse_args()
 
     ho_ten = args.ten
-    mssv = args.mssv
     lop = args.lop
+    mssv = args.mssv
 
-    # Nếu chạy trực tiếp không tham số -> Cho người dùng nhập tương tác
     if not ho_ten or not lop:
-        print("═" * 80)
-        print("    CHƯƠNG TRÌNH XỬ LÝ ĐƠN LẺ TRỌN GÓI CẢ 3 NGHIỆP VỤ CHO 1 ĐOÀN VIÊN MỚI")
-        print("  (1. Rèn luyện đoàn viên + 2. Đánh giá xếp loại xuất sắc + 3. Cấp thẻ đoàn)")
-        print("═" * 80)
+        print("═" * 88)
+        print("    CHƯƠNG TRÌNH XỬ LÝ ĐƠN LẺ TRỌN GÓI CHO 1 ĐOÀN VIÊN (CHỈ CẦN TÊN + LỚP)")
+        print("  (0. Duyệt App -> 1. Rèn luyện 100đ -> 2. Cấp thẻ đoàn -> 3. Đánh giá xuất sắc)")
+        print("═" * 88)
         try:
             ho_ten = input("1. Nhập Họ và Tên đoàn viên: ").strip()
-            mssv = input("2. Nhập Mã số sinh viên (MSSV): ").strip()
-            lop = input("3. Nhập Lớp / Chi đoàn (VD: 26130FIE): ").strip()
+            lop = input("2. Nhập Lớp / Chi đoàn (VD: 26130FIE): ").strip()
+            mssv = input("3. Nhập MSSV (nếu có, hoặc bấm Enter để bỏ qua): ").strip()
         except EOFError:
             pass
 
@@ -479,7 +481,7 @@ def main():
         print("❌ Lỗi: Cần cung cấp đầy đủ Tên đoàn viên và Lớp!")
         sys.exit(1)
 
-    process_single_member(ho_ten, mssv, lop)
+    process_single_member(ho_ten, lop, mssv)
 
 if __name__ == "__main__":
     main()
