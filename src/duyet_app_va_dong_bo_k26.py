@@ -149,7 +149,8 @@ def main():
         if unregistered and tc_list:
             for b in range(0, len(unregistered), 5):
                 batch_ids = unregistered[b:b+5]
-                reg_payload = {"id_chuongtrinh": id_chuongtrinh, "nam": config.YEAR, "lid": batch_ids, "ltc": tc_list}
+                ltd_data = [{"id": x["id"], "noidung_cuthehoa": ""} for x in tc_list]
+            reg_payload = {"id_chuongtrinh": id_chuongtrinh, "nam": config.YEAR, "lid": batch_ids, "ltd": ltd_data}
                 save_reg = client.call("ndv05.dangky.save_dangky_tieuchi", reg_payload)
                 if save_reg.get("success"):
                     newly_reg += len(batch_ids)

@@ -134,7 +134,8 @@ def process_single_member(ho_ten, lop_ten, mssv=""):
                 if isinstance(tc_res, list):
                     tc_list = tc_res
             if tc_list:
-                reg_payload = {"id_chuongtrinh": id_chuongtrinh, "nam": config.YEAR, "lid": [matched_t1["id"]], "ltc": tc_list}
+                ltd_data = [{"id": x["id"], "noidung_cuthehoa": ""} for x in tc_list]
+            reg_payload = {"id_chuongtrinh": id_chuongtrinh, "nam": config.YEAR, "lid": [matched_t1["id"]], "ltd": ltd_data}
                 save_reg = client.call("ndv05.dangky.save_dangky_tieuchi", reg_payload)
                 if save_reg.get("success"):
                     print("   • Chi đoàn: Đăng ký thành công 31 tiêu chí rèn luyện! ✅")

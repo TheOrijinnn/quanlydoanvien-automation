@@ -36,7 +36,8 @@ def process_one_chidoan(idx, total_acc, name, username):
     newly_registered = 0
 
     if unregistered and tc_list:
-        # CHÚ Ý QUAN TRỌNG: Chia nhỏ mảng thành từng cụm 5 đoàn viên/lần gửi để tránh lỗi ORA-01403 của Oracle backend
+        # Chuẩn bị danh sách tiêu chí theo đúng cấu trúc frontend
+        ltd_data = [{"id": x["id"], "noidung_cuthehoa": ""} for x in tc_list]
         BATCH_SIZE = 5
         for i in range(0, len(unregistered), BATCH_SIZE):
             batch_ids = unregistered[i:i+BATCH_SIZE]
@@ -44,7 +45,7 @@ def process_one_chidoan(idx, total_acc, name, username):
                 "id_chuongtrinh": id_chuongtrinh,
                 "nam": YEAR,
                 "lid": batch_ids,
-                "ltc": tc_list
+                "ltd": ltd_data
             }
             save_reg = client.call("ndv05.dangky.save_dangky_tieuchi", reg_payload)
             if save_reg.get("success"):
